@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.api.test.junit_mockito.models.User;
 import br.com.api.test.junit_mockito.repositories.UserRepository;
+import br.com.api.test.junit_mockito.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class UserService {
@@ -13,7 +14,8 @@ public class UserService {
     private UserRepository userRepository;
 
     public User findById(Long id) {
-        return userRepository.findById(id).get();
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("User id: " + id + ", not Found."));
     }
 
 }
