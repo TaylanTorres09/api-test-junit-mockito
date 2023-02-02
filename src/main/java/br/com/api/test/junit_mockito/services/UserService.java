@@ -49,4 +49,10 @@ public class UserService {
         return this.userRepository.save(mapper.map(userDTO, User.class));
     }
 
+    public void delete(Long id) {
+        this.findById(id);
+
+        this.userRepository.deleteById(id);
+    }
+
 }
