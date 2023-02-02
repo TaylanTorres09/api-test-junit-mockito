@@ -38,13 +38,14 @@ public class UserService {
 
     private void findByEmail(UserDTO userDTO) {
         Optional<User> user = this.userRepository.findByEmail(userDTO.getEmail());
-        if(user.isPresent())
+        if(user.isPresent() && !user.get().getId().equals(userDTO.getId()))
             throw new DataIntegrityViolationException("Email já cadastrado");
     }
 
     public User update(UserDTO userDTO, Long id) {
         this.findById(id);
         userDTO.setId(id);
+        this.findByEmail(userDTO);
         return this.userRepository.save(mapper.map(userDTO, User.class));
     }
 
