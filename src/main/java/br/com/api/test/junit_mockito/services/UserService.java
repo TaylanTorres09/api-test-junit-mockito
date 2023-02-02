@@ -1,6 +1,7 @@
 package br.com.api.test.junit_mockito.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import br.com.api.test.junit_mockito.dtos.UserDTO;
 import br.com.api.test.junit_mockito.models.User;
 import br.com.api.test.junit_mockito.repositories.UserRepository;
+import br.com.api.test.junit_mockito.services.exceptions.DataIntegrityViolationException;
 import br.com.api.test.junit_mockito.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -30,7 +32,14 @@ public class UserService {
     }
 
     public User create(UserDTO userDTO) {
+        this.findByEmail(userDTO);
         return this.userRepository.save(mapper.map(userDTO, User.class));
+    }
+
+    private void findByEmail(UserDTO userDTO) {
+        Optional<User> user = this.userRepository.findByEmail(userDTO.getEmail());
+        if(user.isPresent())
+            throw new DataIntegrityViolationException("Email já cadastrado");
     }
 
 }
