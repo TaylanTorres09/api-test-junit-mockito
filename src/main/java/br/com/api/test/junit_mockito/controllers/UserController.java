@@ -1,5 +1,7 @@
 package br.com.api.test.junit_mockito.controllers;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +27,15 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-        User user = userService.findById(id);
+        User user = this.userService.findById(id);
         return new ResponseEntity<UserDTO>(mapper.map(user, UserDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> findAll() {
+        List<User> users = this.userService.findAll();
+        List<UserDTO> userDTOs = users.stream().map(user -> mapper.map(user, UserDTO.class)).toList();
+        return new ResponseEntity<List<UserDTO>>(userDTOs, HttpStatus.OK);
     }
     
 }

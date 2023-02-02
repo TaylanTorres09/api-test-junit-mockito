@@ -1,5 +1,7 @@
 package br.com.api.test.junit_mockito.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,10 @@ public class UserService {
     public User findById(Long id) {
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("User id: " + id + ", not Found."));
+    }
+
+    public List<User> findAll() {
+        return this.userRepository.findAll();
     }
 
 }
