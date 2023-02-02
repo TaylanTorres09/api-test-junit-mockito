@@ -1,5 +1,7 @@
 package br.com.api.test.junit_mockito.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -16,6 +18,7 @@ public class UserDTO {
     @Email
     private String email;
     
+    @JsonIgnore
     @NotEmpty(message = "Senha obrigatória")
     private String password;
 
