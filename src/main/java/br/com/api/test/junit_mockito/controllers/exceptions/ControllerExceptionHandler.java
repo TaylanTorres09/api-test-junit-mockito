@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.api.test.junit_mockito.services.exceptions.DataIntegrityViolationException;
 import br.com.api.test.junit_mockito.services.exceptions.ObjectNotFoundException;
 import jakarta.servlet.ServletRequest;
 
@@ -15,6 +16,12 @@ public class ControllerExceptionHandler {
     public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e,  ServletRequest request) {
         StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), e.getMessage());
         return new ResponseEntity<StandardError>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> dataIntegrityViolation(DataIntegrityViolationException e,  ServletRequest request) {
+        StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return new ResponseEntity<StandardError>(error, HttpStatus.BAD_REQUEST);
     }
 
 }
