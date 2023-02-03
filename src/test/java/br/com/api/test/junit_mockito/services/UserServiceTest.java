@@ -2,6 +2,8 @@ package br.com.api.test.junit_mockito.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -17,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.api.test.junit_mockito.dtos.UserDTO;
 import br.com.api.test.junit_mockito.models.User;
 import br.com.api.test.junit_mockito.repositories.UserRepository;
+import br.com.api.test.junit_mockito.services.exceptions.ObjectNotFoundException;
 
 @SpringBootTest
 public class UserServiceTest {
@@ -63,17 +66,24 @@ public class UserServiceTest {
     }
 
     @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException() {
+        when(userRepository.findById(anyLong())).thenThrow(new ObjectNotFoundException("User id: " + anyLong() + ", not Found."));
+
+        try {
+            userService.findById(ID);
+        } catch (Exception e) {
+            assertEquals(ObjectNotFoundException.class, e.getClass());
+            assertEquals("User id: " + anyLong() + ", not Found.", e.getMessage());
+        }
+    }
+
+    @Test
     void testCreate() {
 
     }
 
     @Test
     void testDelete() {
-
-    }
-
-    @Test
-    void testFindAll() {
 
     }
 
