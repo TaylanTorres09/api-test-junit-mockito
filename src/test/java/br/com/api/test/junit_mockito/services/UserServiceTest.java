@@ -84,6 +84,7 @@ public class UserServiceTest {
 
         List<User> users = userRepository.findAll();
 
+        assertNotNull(users);
         assertEquals(1, users.size());
 
     }
