@@ -140,6 +140,19 @@ public class UserServiceTest {
         assertEquals(password, response.getPassword());
     }
 
+    @Test
+    void whenUpdateThenReturnDataIntegrityViolationException() {
+        when(userRepository.findByEmail(anyString())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(Long.valueOf(2));
+            userService.create(userDTO);
+        } catch (Exception e) {
+            assertEquals(DataIntegrityViolationException.class, e.getClass());
+            assertEquals("Email já cadastrado", e.getMessage());
+        }
+    }
+
     private void startUser() {
         user = new User(ID, name, email, password);
         userDTO = new UserDTO(ID, name, email, password);
