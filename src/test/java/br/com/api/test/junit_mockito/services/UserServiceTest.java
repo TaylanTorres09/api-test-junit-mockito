@@ -89,6 +89,11 @@ public class UserServiceTest {
         assertNotNull(users);
         assertEquals(1, users.size());
         assertEquals(User.class, firstElement.getClass());
+
+        assertEquals(ID, firstElement.getId());
+        assertEquals(name, firstElement.getName());
+        assertEquals(email, firstElement.getEmail());
+        assertEquals(password, firstElement.getPassword());
     }
 
     @Test
