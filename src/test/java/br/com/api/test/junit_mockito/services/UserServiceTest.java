@@ -2,6 +2,7 @@ package br.com.api.test.junit_mockito.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -84,12 +85,12 @@ public class UserServiceTest {
 
         List<User> users = userRepository.findAll();
 
-        User firstElement = users.get(0);
-
+        
         assertNotNull(users);
         assertEquals(1, users.size());
+        User firstElement = users.get(0);
         assertEquals(User.class, firstElement.getClass());
-
+        
         assertEquals(ID, firstElement.getId());
         assertEquals(name, firstElement.getName());
         assertEquals(email, firstElement.getEmail());
@@ -97,8 +98,17 @@ public class UserServiceTest {
     }
 
     @Test
-    void testCreate() {
+    void whenCreateThenReturnUser() {
+        when(userRepository.save(any())).thenReturn(user);
 
+        User response = userService.create(userDTO);
+
+        assertNotNull(response);
+        assertEquals(User.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(name, response.getName());
+        assertEquals(email, response.getEmail());
+        assertEquals(password, response.getPassword());
     }
 
     @Test
