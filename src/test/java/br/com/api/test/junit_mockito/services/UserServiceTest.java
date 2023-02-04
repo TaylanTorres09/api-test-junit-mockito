@@ -127,13 +127,17 @@ public class UserServiceTest {
     }
 
     @Test
-    void testDelete() {
+    void whenUpdateThenReturnUser() {
+        when(userRepository.save(any())).thenReturn(user);
 
-    }
+        User response = userService.create(userDTO);
 
-    @Test
-    void testUpdate() {
-
+        assertNotNull(response);
+        assertEquals(User.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(name, response.getName());
+        assertEquals(email, response.getEmail());
+        assertEquals(password, response.getPassword());
     }
 
     private void startUser() {
