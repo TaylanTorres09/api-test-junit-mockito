@@ -84,9 +84,11 @@ public class UserServiceTest {
 
         List<User> users = userRepository.findAll();
 
+        User firstElement = users.get(0);
+
         assertNotNull(users);
         assertEquals(1, users.size());
-
+        assertEquals(User.class, firstElement.getClass());
     }
 
     @Test
