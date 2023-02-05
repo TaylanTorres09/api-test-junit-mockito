@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO) {
         User user = this.userService.create(userDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/{id}").buildAndExpand(user.getId()).toUri();
         
