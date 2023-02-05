@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.net.URI;
@@ -139,7 +142,14 @@ public class UserControllerTest {
     }
 
     @Test
-    void testDelete() {
+    void whenDeleteReturnAccepted() {
+        doNothing().when(userService).delete(anyLong());
+
+        ResponseEntity<?> response = userController.delete(ID) ;
+
+        assertNotNull(response);
+        verify(userService, times(1)).delete(anyLong());
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
 
     }
 
