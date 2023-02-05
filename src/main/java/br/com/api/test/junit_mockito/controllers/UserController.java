@@ -2,6 +2,7 @@ package br.com.api.test.junit_mockito.controllers;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
         List<User> users = this.userService.findAll();
-        List<UserDTO> userDTOs = users.stream().map(user -> mapper.map(user, UserDTO.class)).toList();
+        List<UserDTO> userDTOs = users.stream().map(user -> mapper.map(user, UserDTO.class)).collect(Collectors.toList());
         return new ResponseEntity<List<UserDTO>>(userDTOs, HttpStatus.OK);
     }
 
