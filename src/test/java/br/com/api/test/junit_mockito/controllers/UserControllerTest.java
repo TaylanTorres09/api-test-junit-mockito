@@ -6,12 +6,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import br.com.api.test.junit_mockito.dtos.UserDTO;
@@ -65,6 +69,28 @@ public class UserControllerTest {
     }
 
     @Test
+    void whenFindAllThenReturnAListOfUsers() {
+        when(userService.findAll()).thenReturn(List.of(user));
+        when(mapper.map(any(), any())).thenReturn(userDTO);
+
+        ResponseEntity<List<UserDTO>> response = userController.findAll();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(ArrayList.class, response.getBody().getClass());
+
+        UserDTO firstElement = response.getBody().get(0);
+
+        assertEquals(UserDTO.class, firstElement.getClass());
+        assertEquals(ID, firstElement.getId());
+        assertEquals(name, firstElement.getName());
+        assertEquals(email, firstElement.getEmail());
+        assertEquals(password, firstElement.getPassword());
+    }
+
+    @Test
     void testCreate() {
 
     }
@@ -74,10 +100,6 @@ public class UserControllerTest {
 
     }
 
-    @Test
-    void testFindAll() {
-
-    }
 
 
     @Test
