@@ -119,16 +119,32 @@ public class UserControllerTest {
     }
 
     @Test
+    void whenUpdateThenReturnSuccess() {
+        when(userService.update(any(), anyLong())).thenReturn(user);
+        when(mapper.map(any(), any())).thenReturn(userDTO);
+
+        ResponseEntity<UserDTO> response = userController.update(userDTO, ID);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(UserDTO.class, response.getBody().getClass());
+        
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(name, response.getBody().getName());
+        assertEquals(email, response.getBody().getEmail());
+        assertEquals(password, response.getBody().getPassword());
+
+    }
+
+    @Test
     void testDelete() {
 
     }
 
 
 
-    @Test
-    void testUpdate() {
-
-    }
 
     private void startUser() {
         user = new User(ID, name, email, password);
