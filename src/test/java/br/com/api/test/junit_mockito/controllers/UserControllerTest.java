@@ -6,9 +6,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +19,10 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.api.test.junit_mockito.dtos.UserDTO;
 import br.com.api.test.junit_mockito.models.User;
@@ -44,10 +50,20 @@ public class UserControllerTest {
     private User user;
     private UserDTO userDTO;
 
+    private URI uri;
+
     @BeforeEach
     void setUp() {
+        MockHttpServletRequest mockRequest = new MockHttpServletRequest();
+        ServletRequestAttributes attributes = new ServletRequestAttributes(mockRequest);
+        RequestContextHolder.setRequestAttributes(attributes);
         MockitoAnnotations.openMocks(this);
         startUser();
+    }
+
+    @After(value = "")
+    public void teardown() {
+        RequestContextHolder.resetRequestAttributes();
     }
 
     @Test
@@ -91,7 +107,14 @@ public class UserControllerTest {
     }
 
     @Test
-    void testCreate() {
+    void whenCreateThenReturnStatusCreated() {
+        when(userService.create(any())).thenReturn(user);
+
+        ResponseEntity<UserDTO> response = userController.create(userDTO);
+
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getHeaders().get("Location"));
 
     }
 
@@ -110,5 +133,6 @@ public class UserControllerTest {
     private void startUser() {
         user = new User(ID, name, email, password);
         userDTO = new UserDTO(ID, name, email, password);
+        uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/{id}").buildAndExpand(ID).toUri();
     }
 }
