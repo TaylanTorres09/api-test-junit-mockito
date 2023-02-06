@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 
+import br.com.api.test.junit_mockito.services.exceptions.DataIntegrityViolationException;
 import br.com.api.test.junit_mockito.services.exceptions.ObjectNotFoundException;
 
 @SpringBootTest
@@ -40,7 +41,18 @@ public class ControllerExceptionHandlerTest {
     }
 
     @Test
-    void testDataIntegrityViolation() {
+    void whenDataIntegrityViolationThenReturnResponseEntity() {
+
+        ResponseEntity<StandardError> response = controllerExceptionHandler.dataIntegrityViolation(
+            new DataIntegrityViolationException("E-mail already registered"), new MockHttpServletRequest());
+        
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(StandardError.class, response.getBody().getClass());
+        assertEquals("E-mail already registered", response.getBody().getError());
+        assertEquals(400, response.getBody().getStatus());
 
     }
 
