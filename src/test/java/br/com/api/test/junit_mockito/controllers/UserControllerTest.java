@@ -9,7 +9,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.api.test.junit_mockito.dtos.UserDTO;
 import br.com.api.test.junit_mockito.models.User;
@@ -52,8 +50,6 @@ public class UserControllerTest {
 
     private User user;
     private UserDTO userDTO;
-
-    private URI uri;
 
     @BeforeEach
     void setUp() {
@@ -159,6 +155,5 @@ public class UserControllerTest {
     private void startUser() {
         user = new User(ID, name, email, password);
         userDTO = new UserDTO(ID, name, email, password);
-        uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/{id}").buildAndExpand(ID).toUri();
     }
 }
